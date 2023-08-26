@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { finalize, switchMap } from 'rxjs';
 import { PedidoDto } from 'src/app/dto/pedidoDto';
 import { PedidoService } from 'src/services/pedido.service';
+import { ListadoPedidoComponent } from './listado-pedido/listado-pedido.component';
 
 @Component({
   selector: 'app-pedido.component',
@@ -20,7 +22,10 @@ export class PedidoComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private pedidoService: PedidoService, private router: Router) {}
+  constructor(
+    private matDialog: MatDialog,
+    private pedidoService: PedidoService
+  ) {}
 
   ngOnInit(): void {
     this.cargarData();
@@ -45,16 +50,30 @@ export class PedidoComponent implements OnInit {
 
   verRegistro(element: PedidoDto): void {
     let numero = element.op;
-    this.pedidoService.setOpPedido(numero);
-    this.pedidoService.setCrudProperty('vista');
-    this.router.navigate(['listado-pedido', numero]);
+    let dialogo = this.matDialog.open(ListadoPedidoComponent, {
+      width: '50%',
+      data: {
+        numero: numero,
+        crudProperty: 'visualizar',
+      },
+    });
+    dialogo.afterClosed().subscribe(() => {
+      console.log('kirby');
+    });
   }
 
   editarRegistro(element: any): void {
     let numero = element.op;
-    this.pedidoService.setOpPedido(numero);
-    this.pedidoService.setCrudProperty('vista');
-    this.router.navigate(['listado-pedido', numero]);
+    let dialogo = this.matDialog.open(ListadoPedidoComponent, {
+      width: '50%',
+      data: {
+        numero: numero,
+        crudProperty: 'edicion',
+      },
+    });
+    dialogo.afterClosed().subscribe(() => {
+      console.log('kirby');
+    });
   }
 
   eliminarRegistro(element: any) {

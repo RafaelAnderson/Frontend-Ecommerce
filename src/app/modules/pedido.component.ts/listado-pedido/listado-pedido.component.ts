@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,33 +18,29 @@ export class ListadoPedidoComponent implements OnInit {
   idPedido: number;
   numeroPedido: string = '';
   crudProperty: string;
+  block: boolean = false;
   pedidosLineaList: PedidoLineaDto[] = [];
   resultsLength: number;
-  displayedColumns: string[] = [
-    'producto',
-    'cantidad',
-    'precio',
-    'importe',
-  ];
+  displayedColumns: string[] = ['producto', 'cantidad', 'precio', 'importe'];
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private pedidoService: PedidoService,
-    private pedidoLineaService: PedidoLineaService
-  ) {
-    if (this.pedidoService.getOpPedido() === undefined) {
-      this.router.navigate(['pedido']);
-    } else {
-      this.idPedido = this.pedidoService.getOpPedido();
-      this.crudProperty = this.pedidoService.getCrudProperty();
-    }
-  }
+    private pedidoLineaService: PedidoLineaService,
+    public dialogRef: MatDialogRef<any>,
+    @Inject(MAT_DIALOG_DATA) public pedidoData: any
+  ) {}
 
   ngOnInit(): void {
+    this.idPedido = this.pedidoData['numero'];
+    this.crudProperty = this.pedidoData['crudProperty'];
+
+    if (this.crudProperty === 'visualizar') {
+      this.block = true;
+    }
+
     this.pedidoService.listarPedido(this.idPedido).subscribe((data) => {
       this.numeroPedido = `${data.numero}`;
       let listado: any[] = [];

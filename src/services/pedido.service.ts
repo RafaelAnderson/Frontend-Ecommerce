@@ -15,22 +15,6 @@ export class PedidoService {
 
   constructor(private http: HttpClient) {}
 
-  getCrudProperty() {
-    return this.crudProperty;
-  }
-
-  setCrudProperty(crud: string) {
-    this.crudProperty = crud;
-  }
-
-  getOpPedido() {
-    return this.opPedido;
-  }
-
-  setOpPedido(op: number) {
-    this.opPedido = op;
-  }
-
   listar() {
     return this.http.get<ApiResponse<PedidoDto[]>>(`${this.url}listar/`);
   }
