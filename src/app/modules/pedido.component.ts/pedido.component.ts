@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { finalize, switchMap } from 'rxjs';
 import { PedidoDto } from 'src/app/dto/pedidoDto';
 import { PedidoService } from 'src/services/pedido.service';
 import { ListadoPedidoComponent } from './listado-pedido/listado-pedido.component';
@@ -25,7 +23,7 @@ export class PedidoComponent implements OnInit {
   constructor(
     private matDialog: MatDialog,
     private pedidoService: PedidoService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarData();
@@ -48,31 +46,50 @@ export class PedidoComponent implements OnInit {
     });
   }
 
+  aplicarFiltro(event: any) {
+    const filtro = event.target.value.trim().toLowerCase();
+    this.dataSource.filter = filtro;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  crearRegistro(): void {
+    let dialogo = this.matDialog.open(ListadoPedidoComponent, {
+      width: '80%',
+      data: {
+        numero: null,
+        crudProperty: 'creacion',
+      },
+    });
+    dialogo.afterClosed().subscribe(() => {
+      this.cargarData();
+    });
+  }
+
   verRegistro(element: PedidoDto): void {
     let numero = element.op;
     let dialogo = this.matDialog.open(ListadoPedidoComponent, {
-      width: '50%',
+      width: '80%',
       data: {
         numero: numero,
         crudProperty: 'visualizar',
       },
     });
     dialogo.afterClosed().subscribe(() => {
-      console.log('kirby');
     });
   }
 
   editarRegistro(element: any): void {
     let numero = element.op;
     let dialogo = this.matDialog.open(ListadoPedidoComponent, {
-      width: '50%',
+      width: '70%',
       data: {
         numero: numero,
         crudProperty: 'edicion',
       },
     });
     dialogo.afterClosed().subscribe(() => {
-      console.log('kirby');
     });
   }
 

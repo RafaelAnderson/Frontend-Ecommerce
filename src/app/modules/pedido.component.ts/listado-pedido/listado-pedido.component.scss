@@ -11,6 +11,23 @@
     font-weight: 600;
 }
 
+.example-container {
+    max-height: 40vh;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}
+
+tr.mat-mdc-footer-row {
+    font-weight: bold;
+}
+
+.mat-mdc-table-sticky {
+    border-top: 1px solid #e0e0e0;
+}
+
 .content {
     max-width: 90%;
     flex-direction: column;
@@ -27,4 +44,8 @@
 
 .mat-icon:hover {
     cursor: pointer;
+}
+
+.align-right-cell {
+    text-align: right;
 }

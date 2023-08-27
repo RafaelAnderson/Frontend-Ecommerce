@@ -1,5 +1,5 @@
 export interface PedidoLineaDto {
-    op: number;
+    op?: number;
     producto: string;
     descripcion: string;
     cantidad: number;
