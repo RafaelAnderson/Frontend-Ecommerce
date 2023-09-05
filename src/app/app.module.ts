@@ -8,6 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { ListadoPedidoComponent } from './modules/pedido.component.ts/listado-pedido/listado-pedido.component';
 import { PedidoComponent } from './modules/pedido.component.ts/pedido.component';
 import { FormsModule } from '@angular/forms';
+import { WjGridModule } from '@grapecity/wijmo.angular2.grid';
+import { WjGridDetailModule } from '@grapecity/wijmo.angular2.grid.detail';
+import { WjInputModule } from '@grapecity/wijmo.angular2.input';
 
 @NgModule({
   declarations: [AppComponent, PedidoComponent, ListadoPedidoComponent],
@@ -17,6 +20,9 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     HttpClientModule,
     MaterialModule,
+    WjGridModule,
+    WjGridDetailModule,
+    WjInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

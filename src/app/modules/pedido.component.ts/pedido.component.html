@@ -1,71 +1,119 @@
-<!-- Toolbar -->
-<div class="toolbar">
-  <img
-    width="40"
-    alt="Angular Logo"
-    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
-  />
-  <span>Welcome</span>
-</div>
+<div class="container-fluid">
+  <h3>HTML in Row Details</h3>
+  <p>
+    This grid shows product categories on each row. Expanding the rows shows an
+    HTML element with information about the products in that category:
+  </p>
+  <wj-flex-grid [itemsSource]="categories" [isReadOnly]="true">
+    <wj-flex-grid-column
+      [header]="'Name'"
+      [binding]="'CategoryName'"
+    ></wj-flex-grid-column>
+    <wj-flex-grid-column
+      [header]="'Description'"
+      [binding]="'Description'"
+      [width]="'*'"
+    ></wj-flex-grid-column>
+    <ng-template wjFlexGridDetail [isAnimated]="true" let-item="item">
+      ID: <b>{{ item.CategoryID }}</b
+      ><br />
+      Name: <b>{{ item.CategoryName }}</b
+      ><br />
+      Description: <b>{{ item.Description }}</b
+      ><br />
+      Products: <b>{{ getProducts(item.CategoryID).length }} items</b><br />
+      <ol>
+        <li *ngFor="let p of getProducts(item.CategoryID)">
+          {{ p.ProductName }}
+        </li>
+      </ol>
+    </ng-template>
+  </wj-flex-grid>
 
-<div style="margin-top: 20px">
-  <h1 style="text-align: center;">Pedidos</h1>
-</div>
-
-<div style="width: 80%; margin: 0 auto; margin-top: 20px">
-  <div>
-    <table
-      mat-table
-      [dataSource]="dataSource"
-      class="mat-elevation-z8"
-      tabindex="0"
+  <h3>Grids in Row Details</h3>
+  <p>
+    You can add anything you want to the detail rows, including other grids.
+    This example shows the same categories, but the detail row uses another grid
+    to show the products:
+  </p>
+  <wj-flex-grid
+    [autoGenerateColumns]="false"
+    [itemsSource]="categories"
+    [isReadOnly]="true"
+  >
+    <wj-flex-grid-column
+      [header]="'Category Name'"
+      [binding]="'CategoryName'"
+      [width]="'*'"
+    ></wj-flex-grid-column>
+    <wj-flex-grid-column
+      [header]="'Description'"
+      [binding]="'Description'"
+      [width]="'2*'"
+    ></wj-flex-grid-column>
+    <ng-template
+      wjFlexGridDetail
+      let-item="item"
+      [detailVisibilityMode]="detailVisibilityMode"
+      [maxHeight]="maxHeight"
+      [isAnimated]="isAnimated"
+      [keyActionEnter]="keyActionEnter"
+      [rowHasDetail]="evenRowHasDetail ? rowHasDetailFn : null"
     >
-      <ng-container matColumnDef="op">
-        <th mat-header-cell *matHeaderCellDef>Op</th>
-        <td mat-cell *matCellDef="let element">{{ element.op }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="numero">
-        <th mat-header-cell *matHeaderCellDef>Número de pedido</th>
-        <td mat-cell *matCellDef="let element">{{ element.numero }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="acciones">
-        <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td mat-cell *matCellDef="let element">
-          <div class="row">
-            <div class="col-xl-4">
-              <mat-icon
-                (click)="verRegistro(element)"
-                class="cursor-pointer text-success"
-                >visibility</mat-icon
-              >
-            </div>
-            <div class="col-xl-4">
-              <mat-icon
-                (click)="editarRegistro(element)"
-                class="cursor-pointer text-warning"
-                >edit</mat-icon
-              >
-            </div>
-            <div class="col-xl-4">
-              <mat-icon
-                (click)="eliminarRegistro(element)"
-                class="cursor-pointer text-danger"
-                >delete</mat-icon
-              >
-            </div>
-          </div>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+      <wj-flex-grid
+        [itemsSource]="getProducts(item.CategoryID)"
+        [isReadOnly]="true"
+        [headersVisibility]="'Column'"
+      >
+        <wj-flex-grid-column
+          [header]="'ID'"
+          [binding]="'ProductID'"
+        ></wj-flex-grid-column>
+        <wj-flex-grid-column
+          [header]="'Name'"
+          [binding]="'ProductName'"
+        ></wj-flex-grid-column>
+        <wj-flex-grid-column
+          [header]="'Qty/Unit'"
+          [binding]="'QuantityPerUnit'"
+        ></wj-flex-grid-column>
+        <wj-flex-grid-column
+          [header]="'Unit Price'"
+          [binding]="'UnitPrice'"
+        ></wj-flex-grid-column>
+        <wj-flex-grid-column
+          [header]="'Discontinued'"
+          [binding]="'Discontinued'"
+        ></wj-flex-grid-column>
+      </wj-flex-grid>
+    </ng-template>
+  </wj-flex-grid>
+  <div class="grid-options">
+    <wj-menu [(value)]="detailVisibilityMode" [header]="'detailVisibilityMode'">
+      <wj-menu-item [value]="'Code'">Code</wj-menu-item>
+      <wj-menu-item [value]="'Selection'">Selection</wj-menu-item>
+      <wj-menu-item [value]="'ExpandSingle'">ExpandSingle</wj-menu-item>
+      <wj-menu-item [value]="'ExpandMulti'">ExpandMulti</wj-menu-item>
+    </wj-menu>
+    <wj-menu [(value)]="maxHeight" [header]="'maxHeight'">
+      <wj-menu-item [value]="0">null</wj-menu-item>
+      <wj-menu-item [value]="100">100</wj-menu-item>
+      <wj-menu-item [value]="200">200</wj-menu-item>
+      <wj-menu-item [value]="300">300</wj-menu-item>
+      <wj-menu-item [value]="400">400</wj-menu-item>
+      <wj-menu-item [value]="500">500</wj-menu-item>
+    </wj-menu>
+    <wj-menu [(value)]="isAnimated" [header]="'isAnimated'">
+      <wj-menu-item [value]="true">True</wj-menu-item>
+      <wj-menu-item [value]="false">False</wj-menu-item>
+    </wj-menu>
+    <wj-menu [(value)]="keyActionEnter" [header]="'keyActionEnter'">
+      <wj-menu-item [value]="'None'">None</wj-menu-item>
+      <wj-menu-item [value]="'ToggleDetail'">ToggleDetail</wj-menu-item>
+    </wj-menu>
+    <wj-menu [(value)]="evenRowHasDetail" [header]="'rowDetails'">
+      <wj-menu-item [value]="false">All</wj-menu-item>
+      <wj-menu-item [value]="true">Even rows only</wj-menu-item>
+    </wj-menu>
   </div>
-  <mat-paginator
-    [length]="resultsLength"
-    [pageSize]="5"
-    showFirstLastButtons
-  ></mat-paginator>
 </div>
