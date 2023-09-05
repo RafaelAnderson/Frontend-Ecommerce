@@ -9,6 +9,7 @@ import { PedidoService } from 'src/services/pedido.service';
 import { ListadoPedidoComponent } from './listado-pedido/listado-pedido.component';
 import { ODataCollectionView } from '@grapecity/wijmo.odata';
 
+
 const url = 'https://services.odata.org/Northwind/Northwind.svc';
 
 @Component({
@@ -25,8 +26,6 @@ export class PedidoComponent {
       this.categories = new ODataCollectionView(url, 'Categories', {
           fields: ['CategoryID', 'CategoryName', 'Description']
       });
-      console.log(this.categories);
-      
       this.products = new ODataCollectionView(url, 'Products');
   }
 

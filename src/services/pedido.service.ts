@@ -16,7 +16,7 @@ export class PedidoService {
   constructor(private http: HttpClient) {}
 
   listar() {
-    return this.http.get<ApiResponse<PedidoDto[]>>(`${this.url}listar/`);
+    return this.http.get<ApiResponse<PedidoDto[]>>(`${this.url}listar`);
   }
 
   listarPedido(id: number) {
